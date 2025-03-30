@@ -44,6 +44,7 @@
             cursor: pointer;
             transform-style: preserve-3d;
             transition: transform 0.5s;
+            margin: 0 auto;  /* 책을 가운데 정렬 */
         }
 
         #book:hover {
@@ -288,10 +289,17 @@
             opacity: 0;
             transition: opacity 0.5s;
         }
-        @media screen and (max-width: 768px) {
+        @media (max-width: 768px) {
             #book {
-                max-width: 90%;
-                aspect-ratio: 0.8;
+                width: 80vw;  /* 화면 너비의 80% */
+                height: calc(80vw * 1.375);  /* 비율 4:3을 유지하도록 설정 */
+            }
+        }   
+
+        @media (max-width: 480px) {
+            #book {
+                width: 90vw;  /* 화면 너비의 90% */
+                height: calc(90vw * 1.375);  /* 비율 4:3을 유지하도록 설정 */
             }
         }
     </style>
@@ -299,11 +307,6 @@
 </head>
 <body>
     <div id="desk">
-        <div class="desk-items">
-            <div class="desk-item coffee-cup"></div>
-            <div class="desk-item pen"></div>
-        </div>
-        
         <div id="book">
             <div class="book-spine"></div>
             <div class="cover" id="book-cover">
