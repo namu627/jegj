@@ -290,16 +290,24 @@
             transition: opacity 0.5s;
         }
         @media (max-width: 768px) {
-            #book {
-                width: 80vw;  /* 화면 너비의 80% */
-                height: calc(80vw * 1.375);  /* 비율 4:3을 유지하도록 설정 */
+            #desk {
+                width: 90%;  /* 화면 크기에 맞게 90%로 설정 */
+                height: 70%; /* 높이는 적당히 줄여서 비율 유지 */
             }
-        }   
+            #book {
+                width: 80%;  /* 책 크기도 80%로 설정 */
+                max-width: 300px; /* 최대 너비 제한 */
+            }
+        }
 
         @media (max-width: 480px) {
+            #desk {
+                width: 95%; /* 화면 크기에 맞게 95%로 설정 */
+                height: 60%; /* 높이를 더 줄여서 책의 비율을 맞춤 */
+            }
             #book {
-                width: 90vw;  /* 화면 너비의 90% */
-                height: calc(90vw * 1.375);  /* 비율 4:3을 유지하도록 설정 */
+                width: 90%;  /* 책 크기도 90%로 설정 */
+                max-width: 250px; /* 최대 너비 제한 */
             }
         }
     </style>
