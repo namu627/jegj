@@ -6,6 +6,8 @@
     <title>그해 우리들의 블루스</title>
     <style>
         body {
+            cursor: url('cursor.ico'), auto;
+            cursor: url('cursor.png'), auto scale(0.1); /* 이미지 크기를 50%로 축소 */
             margin: 0;
             padding: 0;
             height: 100vh;
@@ -20,10 +22,11 @@
             background-attachment: fixed;
         }
 
-
         #book {
-            width: 400px;
-            height: 550px;
+            width: 90vw; /* 화면 너비의 90% */
+            height: calc(90vw * 550 / 400); /* 400:550 비율 유지 */
+            max-width: 400px; /* 최대 너비 제한 */
+            max-height: 550px; /* 최대 높이 제한 */
             position: relative;
             perspective: 1500px;
             cursor: pointer;
@@ -31,6 +34,22 @@
             transition: transform 0.5s;
             margin: 0 auto;  /* 책을 가운데 정렬 */
             display: none; /* 책 숨김 */
+            opacity: 0; /* 초기 투명도 0으로 설정 */
+            transform: scale(0.5); /* 초기 크기 0.5로 설정 */
+            transition: opacity 1s ease-in-out, transform 1s ease-in-out; /* 애니메이션 효과 추가 */
+        }
+
+        @media (max-width: 400px) {
+            #book {
+                width: 100vw; /* 작은 화면에서는 화면 전체 너비 사용 */
+                height: calc(100vw * 550 / 400);
+            }
+        }
+
+        #book.show {
+            display: block;
+            opacity: 1; /* 투명도 1로 변경 */
+            transform: scale(1); /* 크기 1로 변경 */
         }
 
         #book:hover {
@@ -350,11 +369,10 @@
         <source src="music.mp3" type="audio/mp3">
         Your browser does not support the audio element.
     </audio>
-    <audio id="page-turn-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-book-page-turning-914.mp3"></audio>
-    <audio id="click-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-modern-click-box-check-1120.mp3"></audio>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            const book = document.getElementById('book');
             const bookCover = document.getElementById('book-cover');
             const page1 = document.getElementById('page1');
             const page2 = document.getElementById('page2');
@@ -363,16 +381,16 @@
             const retryBtn = document.getElementById('retry-btn');
             const bgMusic = document.getElementById('bg-music');
             const letterContent = document.getElementById('letter-content');
-            const pageTurnSound = document.getElementById('page-turn-sound');
-            const clickSound = document.getElementById('click-sound');
             const pageTurnEffect = document.getElementById('page-turn-effect');
+            const heart = document.getElementById('heart');
             
-            // 음악 자동 재생
-            document.body.addEventListener('click', function() {
+            // 음악 자동 재생 및 책 표시 (하트 클릭 시)
+            heart.addEventListener('click', function() {
                 bgMusic.play().catch(e => console.log("Audio play failed:", e));
                 book.style.display = 'block'; // 책 표시
                 heart.style.display = 'none'; // 하트 숨김
-            }, { once: true });
+                book.classList.add('show'); // 애니메이션 적용
+            });
 
 
             // 사진 데이터
@@ -395,7 +413,6 @@
             // 책 표지 클릭 이벤트
             bookCover.addEventListener('click', function() {
                 bookCover.classList.add('flipping');
-                pageTurnSound.play();
                 setTimeout(() => {
                     bookCover.style.display = 'none';
                     pageTurnEffect.style.opacity = '1';
@@ -427,8 +444,6 @@
                     photoElement.dataset.id = photo.id;
                     photoElement.dataset.order = photo.order;
                     photoElement.addEventListener('click', () => {
-                        clickSound.currentTime = 0;
-                        clickSound.play();
                         selectPhoto(photoElement);
                     });
                     photoGrid.appendChild(photoElement);
@@ -446,11 +461,8 @@
                     
                     if (currentOrder > photos.length) {
                         pageTurnEffect.classList.add('turning'); // 애니메이션 클래스 추가
-                        pageTurnSound.play();
-
                         setTimeout(() => {
                             pageTurnEffect.style.opacity = '1';
-                            pageTurnSound.play();
                             setTimeout(() => {
                                 page1.classList.remove('active');
                                 pageTurnEffect.style.opacity = '0';
@@ -477,7 +489,6 @@
 
             // 다시하기 버튼
             retryBtn.addEventListener('click', function() {
-                clickSound.play();
                 initPhotoGame();
             });
         });
