@@ -125,10 +125,10 @@
             box-sizing: border-box;
             display: none;
             flex-direction: column;
-            justify-content: center;
             align-items: center;
             overflow-y: auto;
             border-left: 1px solid #D2B48C;
+            /* justify-content: center; 삭제 */
         }
 
         .page.active {
@@ -310,6 +310,66 @@
                 opacity: 0;
             }
         }
+        .quiz-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .question {
+            text-align: center;
+        }
+
+        .options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            width: 80%;
+            max-width: 300px;
+            margin-top: 10px;
+        }
+
+        #options3 {
+            display: flex;
+            flex-direction: column; /* 세로로 배치 */
+            align-items: stretch; /* 버튼 너비를 부모에 맞춤 */
+            gap: 10px; /* 버튼 사이 간격 */
+            width: 80%; /* 너비 조정 (선택 사항) */
+            max-width: 300px; /* 최대 너비 유지 (선택 사항) */
+            margin: 10px auto; /* 가운데 정렬 */
+        }
+
+        #options3 button {
+            /* 필요하다면 버튼 자체의 스타일 조정 */
+        }
+
+        .options button {
+            padding: 10px 15px;
+            border: 1px solid #D2B48C;
+            border-radius: 5px;
+            background-color: #FFF8E7;
+            cursor: pointer;
+            font-size: 16px;
+            font-family: 'Nanum Gothic', sans-serif;
+            transition: background-color 0.3s;
+        }
+
+        .options button:hover {
+            background-color: #E0D0B1;
+        }
+        .answer-feedback {
+            margin-left: 10px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        .correct {
+            color: green;
+        }
+        .incorrect {
+            color: red;
+        }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&family=Nanum+Myeongjo:wght@700&family=Nanum+Gothic:wght@700&display=swap" rel="stylesheet">
 </head>
@@ -320,30 +380,69 @@
         <div class="cover" id="book-cover">
             <h1>그해 우리들의 블루스</h1>
         </div>
-        <div class="page" id="page1">
+        <div class="page active" id="quiz-page">
+            <div class="message">간단한 퀴즈를 풀어보세요!</div>
+            <div class="error-message" id="quiz-error-message">틀렸습니다. 다시 시도해주세요.</div>
+            <div class="error-message" id="quiz-success-message" style="color: green; font-weight: bold; display: none; margin-bottom: 20px; text-shadow: 1px 1px 2px rgba(0,0,0,0.1); font-size: 16px;">정답입니다!</div>
+            <div class="quiz-container">
+                <div class="question">
+                    <p id="question1">우리가 처음 만난 곳은 어디일까요?</p>
+                    <span id="answer-feedback-1" class="answer-feedback"></span>
+                    <div class="options" id="options1">
+                        <button class="option" data-question="1" data-answer="A">A. 수학의 왕도</button>
+                        <button class="option" data-question="1" data-answer="B">B. 수학의 정석</button>
+                        <button class="option" data-question="1" data-answer="C">C. 수학의 아침</button>
+                        <button class="option" data-question="1" data-answer="D">D. 수학의 달인</button>
+                    </div>
+                </div>
+                <div class="question">
+                    <p id="question2">우리가 처음으로 함께 간 여행지는 어디일까요?</p>
+                    <span id="answer-feedback-2" class="answer-feedback"></span>
+                    <div class="options" id="options2">
+                        <button class="option" data-question="2" data-answer="A">A. 제주도</button>
+                        <button class="option" data-question="2" data-answer="B">B. 부산</button>
+                        <button class="option" data-question="2" data-answer="C">C. 강릉</button>
+                        <button class="option" data-question="2" data-answer="D">D. 서울</button>
+                    </div>
+                </div>
+                <div class="question">
+                    <p id="question3">우리의 첫 데이트 날짜는 며칠일까요?</p>
+                    <span id="answer-feedback-3" class="answer-feedback"></span>
+                    <div class="options" id="options3">
+                        <button class="option" data-question="3" data-answer="A">A. 5월 9일</button>
+                        <button class="option" data-question="3" data-answer="B">B. 5월 10일</button>
+                        <button class="option" data-question="3" data-answer="C">C. 5월 11일</button>
+                        <button class="option" data-question="3" data-answer="D">D. 5월 12일</button>
+                    </div>
+                </div>
+            </div>
+            <button id="quiz-retry-btn">다시하기</button>
+            <button id="next-page-btn" style="display: none;">다음 페이지</button>
+        </div>
+        <div class="page" id="photo-game-page">
             <div class="message">우리의 추억을 시간 순서대로 맞춰보세요!</div>
-            <div class="error-message">왜 못맞춰 바보야 ㅠㅠ</div>
+            <div class="error-message" id="photo-error-message">왜 못맞춰 바보야 ㅠㅠ</div>
             <div class="photo-grid" id="photo-grid"></div>
             <button id="retry-btn" style="display: none;">다시하기</button>
         </div>
         <div class="page" id="page2">
             <div class="letter">
                 <div class="letter-content" id="letter-content">
-                    사랑하는 내 여자친구에게,
+                    사랑하는 여자친구에게,
 
                     알게된지 10년, 여자친구로 지낸지 1년이네. 1주년 축하해
-                        
-                    사랑표현 많이 못해줘서 미안해. 
+
+                    사랑표현 많이 못해줘서 미안해.
                     사랑하는건 그대론데 보고있으면 귀여워서 삼켜버리고싶은데
-                    오히려 너가 불안해하고 계속 사랑을 확인하게 만들어서 미안해. 
+                    오히려 너가 불안해하고 계속 사랑을 확인하게 만들어서 미안해.
                     당시에 여러 잡생각 들면서 혼자 스트레스 받고 예민해지고 그러면서 마음에 여유가 좀 없었나봐.
                     그래서 말에 영혼도 없는거같고 진심도 안느껴지고 그냥 말하는데도 너가 듣기엔 킹받는 투였던것 같아
                     항상 말하고 나서야 '아 이게 아닌데..' 그러려던게 아닌데 잘 안되니까 짜증만 나더라
-                    이 시기만 지나면 괜찮아지겠지 하고 생각하면서 보냈어. 
-                        
+                    이 시기만 지나면 괜찮아지겠지 하고 생각하면서 보냈어.
+
                     넌 의지해도 된다고 하는데 내눈엔 너가 너무 애기라 의지하고 그러기가 좀 그래
                     유치원생한테 의지하고싶은 늙은이가 어딨나
-                    반 장난이고 지금도 많이 의지하고 있어. 
+                    반 장난이고 지금도 많이 의지하고 있어.
                     지금으로도 충분해. 날 좋다고 해주는 너가 늘 고마워
 
                     좋은날에 꿀꿀한 얘기해서 미안. 곧 학기가 끝나고 방학인데
@@ -358,12 +457,12 @@
                     많이 사랑해.
                     2025년 5월 9일
                 </div>
-            <div class="signature">남자친구가</div>
+                <div class="signature">남자친구가</div>
             </div>
         </div>
         <div class="page-turn-effect" id="page-turn-effect"></div>
     </div>
-    
+
 
     <audio id="bg-music" loop>
         <source src="music.mp3" type="audio/mp3">
@@ -374,22 +473,37 @@
         document.addEventListener('DOMContentLoaded', function() {
             const book = document.getElementById('book');
             const bookCover = document.getElementById('book-cover');
-            const page1 = document.getElementById('page1');
-            const page2 = document.getElementById('page2');
+            const quizPage = document.getElementById('quiz-page');
+            const quizErrorMessage = document.getElementById('quiz-error-message');
+            const quizSuccessMessage = document.getElementById('quiz-success-message');
+            const quizRetryBtn = document.getElementById('quiz-retry-btn');
+            const nextPageBtn = document.getElementById('next-page-btn');
+            const photoGamePage = document.getElementById('photo-game-page');
             const photoGrid = document.getElementById('photo-grid');
-            const errorMessage = document.querySelector('.error-message');
+            const photoErrorMessage = document.getElementById('photo-error-message');
             const retryBtn = document.getElementById('retry-btn');
             const bgMusic = document.getElementById('bg-music');
             const letterContent = document.getElementById('letter-content');
             const pageTurnEffect = document.getElementById('page-turn-effect');
             const heart = document.getElementById('heart');
-            
+            const question1Element = document.getElementById('question1');
+            const options1Element = document.getElementById('options1');
+            const question2Element = document.getElementById('question2');
+            const options2Element = document.getElementById('options2');
+            const question3Element = document.getElementById('question3');
+            const options3Element = document.getElementById('options3');
+            const answerFeedback1 = document.getElementById('answer-feedback-1');
+            const answerFeedback2 = document.getElementById('answer-feedback-2');
+            const answerFeedback3 = document.getElementById('answer-feedback-3');
+            const page1 = document.getElementById('photo-game-page');
+            const page2 = document.getElementById('page2');
+
             // 음악 자동 재생 및 책 표시 (하트 클릭 시)
             heart.addEventListener('click', function() {
                 bgMusic.play().catch(e => console.log("Audio play failed:", e));
-                book.style.display = 'block'; // 책 표시
-                heart.style.display = 'none'; // 하트 숨김
-                book.classList.add('show'); // 애니메이션 적용
+                book.style.display = 'block';
+                heart.style.display = 'none';
+                book.classList.add('show');
             });
 
 
@@ -418,10 +532,151 @@
                     pageTurnEffect.style.opacity = '1';
                     setTimeout(() => {
                         pageTurnEffect.style.opacity = '0';
-                        page1.classList.add('active');
+                        quizPage.classList.add('active');
+                        loadQuiz();
                     }, 500);
-                    initPhotoGame();
                 }, 1500);
+            });
+            // 퀴즈 데이터
+            const quizQuestions = [
+                {
+                    question1: "우리가 처음 만난 곳은 어디일까요?",
+                    options1: ["수학의 왕도", "수학의 정석", "수학의 아침", "수학의 달인"],
+                    answer1: "D"
+                },
+                {
+                    question2: "우리가 같이 가본적이 없는 곳은?",
+                    options2: ["부산", "제주도", "횡성", "베트남"],
+                    answer2: "A"
+                },
+                {
+                    question3: "다음 중 반가운 상황은?",
+                    options3: ["머리에 뭐 있다면서 은근슬쩍 머리 쓰다듬는 차은우", 
+                    "운동하고 왔다고 옷벗으며 복근 한번 만져보라는 송강", 
+                    "'남유찬'", 
+                    "보고싶었다고 눈가가 촉촉해지며 바라보는 변우석"],
+                    answer3: "B"
+                }
+            ];
+
+            let currentQuiz = 0;
+            let answers = {}; // 사용자의 답을 저장할 객체
+
+            // 퀴즈 로드 함수
+            function loadQuiz() {
+                // 첫 번째 질문 로드
+                const firstQuizData = quizQuestions[0];
+                question1Element.textContent = firstQuizData.question1;
+                const options1 = firstQuizData.options1;
+                options1Element.querySelectorAll('button').forEach((button, index) => {
+                    button.textContent = `${String.fromCharCode(65 + index)}. ${options1[index]}`;
+                    button.dataset.question = '1';
+                    button.dataset.answer = String.fromCharCode(65 + index);
+                    button.dataset.correctAnswer = firstQuizData.answer1;
+                });
+                answerFeedback1.textContent = '';
+                answerFeedback1.className = 'answer-feedback';
+
+                // 두 번째 질문 로드
+                const secondQuizData = quizQuestions[1];
+                question2Element.textContent = secondQuizData.question2;
+                const options2 = secondQuizData.options2;
+                options2Element.querySelectorAll('button').forEach((button, index) => {
+                    button.textContent = `${String.fromCharCode(65 + index)}. ${options2[index]}`;
+                    button.dataset.question = '2';
+                    button.dataset.answer = String.fromCharCode(65 + index);
+                    button.dataset.correctAnswer = secondQuizData.answer2;
+                });
+                answerFeedback2.textContent = '';
+                answerFeedback2.className = 'answer-feedback';
+
+                // 세 번째 질문 로드
+                const thirdQuizData = quizQuestions[2];
+                question3Element.textContent = thirdQuizData.question3;
+                const options3 = thirdQuizData.options3;
+                options3Element.querySelectorAll('button').forEach((button, index) => {
+                    button.textContent = `${String.fromCharCode(65 + index)}. ${options3[index]}`;
+                    button.dataset.question = '3';
+                    button.dataset.answer = String.fromCharCode(65 + index);
+                    button.dataset.correctAnswer = thirdQuizData.answer3;
+                });
+                answerFeedback3.textContent = '';
+                answerFeedback3.className = 'answer-feedback';
+
+                quizErrorMessage.style.display = 'none';
+                quizSuccessMessage.style.display = 'none';
+                quizRetryBtn.style.display = 'none';
+                nextPageBtn.style.display = 'none';
+                answers = {};
+            }
+
+            // 퀴즈 정답 확인
+            const options = document.querySelectorAll('.option');
+            options.forEach(option => {
+                option.addEventListener('click', function() {
+                    const questionNumber = this.dataset.question;
+                    const selectedAnswer = this.dataset.answer;
+                    const correctAnswer = this.dataset.correctAnswer;
+                    answers[questionNumber] = selectedAnswer;
+
+                    let feedbackElement;
+                    if (questionNumber === '1') {
+                        feedbackElement = answerFeedback1;
+                    } else if (questionNumber === '2') {
+                        feedbackElement = answerFeedback2;
+                    } else if (questionNumber === '3') {
+                        feedbackElement = answerFeedback3;
+                    }
+
+                    if (selectedAnswer === correctAnswer) {
+                        feedbackElement.textContent = '😁😁😁';
+                        feedbackElement.className = 'answer-feedback correct';
+                    } else {
+                        feedbackElement.textContent = '😡😡😡';
+                        feedbackElement.className = 'answer-feedback incorrect';
+                    }
+
+                    // 모든 질문에 답했는지 확인
+                    if (answers['1'] && answers['2'] && answers['3']) {
+                        if (
+                            answers['1'] === quizQuestions[0].answer1 &&
+                            answers['2'] === quizQuestions[1].answer2 &&
+                            answers['3'] === quizQuestions[2].answer3
+                        ) {
+                            // 모두 정답인 경우 성공 메시지 표시
+                            quizSuccessMessage.style.display = 'block';
+                            nextPageBtn.style.display = 'block';
+                            quizErrorMessage.style.display = 'none';
+                            quizRetryBtn.style.display = 'none';
+                        } else {
+                            // 하나라도 틀린 경우 에러 메시지와 다시하기 버튼 표시
+                            quizErrorMessage.style.display = 'block';
+                            quizSuccessMessage.style.display = 'none';
+                            quizRetryBtn.style.display = 'block';
+                            nextPageBtn.style.display = 'none';
+                        }
+                    }
+                });
+            });
+
+            // 퀴즈 다시하기 버튼 이벤트
+            quizRetryBtn.addEventListener('click', function() {
+                loadQuiz();
+            });
+
+            // 다음 페이지 (사진 게임) 버튼 이벤트
+            nextPageBtn.addEventListener('click', function() {
+                quizPage.classList.remove('active');
+                pageTurnEffect.classList.add('turning');
+                setTimeout(() => {
+                    pageTurnEffect.style.opacity = '1';
+                    setTimeout(() => {
+                        pageTurnEffect.style.opacity = '0';
+                        pageTurnEffect.classList.remove('turning');
+                        photoGamePage.classList.add('active');
+                        initPhotoGame();
+                    }, 1200);
+                }, 1000);
             });
 
             // 사진 게임 초기화
@@ -430,7 +685,7 @@
                 selectedPhotos = [];
                 shuffledPhotos = [...photos].sort(() => Math.random() - 0.5);
                 renderPhotos();
-                errorMessage.style.display = 'none';
+                photoErrorMessage.style.display = 'none';
                 retryBtn.style.display = 'none';
             }
 
@@ -453,37 +708,37 @@
             // 사진 선택
             function selectPhoto(photoElement) {
                 const order = parseInt(photoElement.dataset.order);
-                
+
                 if (order === currentOrder) {
                     photoElement.classList.add('selected');
                     selectedPhotos.push(photoElement);
                     currentOrder++;
-                    
+
                     if (currentOrder > photos.length) {
-                        pageTurnEffect.classList.add('turning'); // 애니메이션 클래스 추가
+                        pageTurnEffect.classList.add('turning');
                         setTimeout(() => {
                             pageTurnEffect.style.opacity = '1';
                             setTimeout(() => {
-                                page1.classList.remove('active');
+                                photoGamePage.classList.remove('active');
                                 pageTurnEffect.style.opacity = '0';
+                                pageTurnEffect.classList.remove('turning');
                                 page2.classList.add('active');
                             }, 1200);
                         }, 1000);
                     }
                 } else {
                     photoElement.classList.add('wrong');
-                    errorMessage.style.display = 'block';
+                    photoErrorMessage.style.display = 'block';
                     retryBtn.style.display = 'block';
                 }
                 if (currentOrder > photos.length) {
-                    pageTurnEffect.classList.add('turning'); // 애니메이션 클래스 추가
-                    pageTurnSound.play();
+                    pageTurnEffect.classList.add('turning');
 
                     setTimeout(() => {
-                        page1.classList.remove('active');
-                        pageTurnEffect.classList.remove('turning'); // 애니메이션 클래스 제거
+                        photoGamePage.classList.remove('active');
+                        pageTurnEffect.classList.remove('turning');
                         page2.classList.add('active');
-                    }, 800); // 애니메이션 지속 시간과 동일하게 설정
+                    }, 800);
                 }
             }
 
@@ -491,6 +746,10 @@
             retryBtn.addEventListener('click', function() {
                 initPhotoGame();
             });
+
+            // 초기 퀴즈 로드 (하트 클릭 전에 보이도록 수정)
+            loadQuiz();
+            quizPage.classList.remove('active');
         });
     </script>
 </body>
